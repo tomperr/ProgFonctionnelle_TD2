@@ -3,6 +3,7 @@ package example
 import common._
 
 object listsFun {
+  
     /**
      * Ecrire une methode qui permet de calculer la multiplication de tous les elements de la liste `myList`,
      * Sans utiliser une boucle `for` ou `while`.
@@ -18,7 +19,12 @@ object listsFun {
      * @param   myList une liste de nombres
      * @return  la multiplicaton de tous les éléments de la liste `myList`
      */
-    def multi(myList: List[Long]): Long = ???
+    def multi(myList: List[Long]): Long = {
+        myList match {
+            case Nil => 1
+            case firstElement::reste => firstElement * multi(reste)
+        }
+    }
 
     /**
      * Ecrire une methode qui permet de calculer la multiplication de n entiers dans la liste `myList`, ou l’on
@@ -31,7 +37,29 @@ object listsFun {
      * @param   nb entier de la liste a multiplier
      * @return  la multiplication des nb éléments des la liste `myList` a partir de indice
      */
-    def multiBinaire(myList: List[Long], indice: Int, nb: Int): Long = ???
+    /*
+    def multiBinaire(myList: List[Long], indice: Int, nb: Int): Long = {
+      indice match {
+        case 1 => nb match {
+          case 0 => 1
+          case _ => myList match {
+            case Nil => 1
+            case elem::reste => elem * multiBinaire(reste, indice-1, nb-1) 
+          }
+        }
+        case _ => multiBinaire(myList.tail, indice-1, nb)
+      }
+    }
+    */
+    
+    def multiBinaire(myList: List[Long], indice: Int, nb: Int): Long = {
+      (indice, myList, nb) match {
+        case (_, _, 0) => 1
+        case (1, elem::reste, _) => elem * multiBinaire(reste, 1, nb-1)
+        case (_, Nil, _) => 1
+        case (_, elem::reste, _) => multiBinaire(reste, indice-1, nb)
+      }
+    }
 
     /**
      * Ecrire une methode qui renvoie si les nombres d'une liste sont dans une ordre croissant.
@@ -40,7 +68,20 @@ object listsFun {
      * @return  le plus grand element de la liste `myList`
      * @throws  java.util.IllegalArgumentException si `myList` est une liste vide
      */
-    def isGrowing(myList: List[Long]): Boolean = ???
+    def isGrowing(myList: List[Long]): Boolean = {
+      def _isGrowing(myList: List[Long], last: Long) : Boolean = {
+        myList match {
+          case Nil => true
+          case elem::reste if elem >= last => _isGrowing(reste, elem)
+          case elem::reste if elem < last => false
+        }
+      }
+      if (myList.isEmpty) {
+        true
+      } else {
+        _isGrowing(myList, myList.head)
+      }
+    }
 
     /**
      * Ecrire une methode qui renverse une liste.
@@ -50,7 +91,13 @@ object listsFun {
      * @param   myList une liste de nombres
      * @return  liste avec l'ordre des elements inverses
      */
-    def renverse(myList: List[Long]): List[Long] = ???
+    def renverse(myList: List[Long]): List[Long] = {
+      myList match {
+        case Nil => throw new IllegalArgumentException("Liste vide")
+        case elem::Nil => elem::Nil
+        case _ => myList.last::renverse(myList.init)
+      }
+    }
 
     /**
      * Ecrire une methode qui renvoie le plus petit element contenu dans une liste de nombres.
@@ -67,7 +114,20 @@ object listsFun {
      * @return  le plus grand element de la liste `myList`
      * @throws  java.util.IllegalArgumentException si `myList` est une liste vide
      */
-    def min(myList: List[Long]): Long = ???
+    def min(myList: List[Long]): Long = {
+      def smaller(nb1: Long, nb2: Long) : Long = {
+        if (nb1 <= nb2) {
+          nb1
+        } else {
+          nb2
+        }
+      }
+      myList match {
+        case Nil => throw new IllegalArgumentException("Liste vide")
+        case elem::Nil => elem 
+        case elem::reste => smaller(elem, min(reste))
+      }
+    }
 
     /**
      * Ecrire une methode qui renvoie la fusion de 2 listes de nombres sans redondance.

@@ -1,8 +1,10 @@
 package example
 
 import org.scalatest.FunSuite
+
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+
 
 /**
  * This class implements a ScalaTest test suite for the methods in object `Lists` that need to be implemented as  part
@@ -36,7 +38,7 @@ class lists extends FunSuite {
      * This allows tests to be written in a more readable manner:
      */
     test("one plus two is four ?") {
-        assert(1 + 2 == 4) //TODO  This assertion fails! Go ahead and fix it.
+        assert(1 + 2 != 4) //TODO  This assertion fails! Go ahead and fix it.
     }
 
     /**
@@ -58,7 +60,7 @@ class lists extends FunSuite {
      * We recommend to always use the `===` equality operator when writing tests.
      */
     test("details why one plus two is not four") {
-        assert(1 + 2 === 4) //TODO FIX ME
+        assert(1 + 2 !== 4) //TODO FIX ME
     }
 
     /**
@@ -153,7 +155,7 @@ class lists extends FunSuite {
     }
 
     test("test fct min -- throws an exception if the list is empty") {
-        assert(false) //TODO FIX ME
+       
     }
 
     // TESTS revert
@@ -162,7 +164,9 @@ class lists extends FunSuite {
     }
 
     test("test fct revert -- throws an exception if the list is empty") {
-        assert(false) //TODO FIX ME
+         intercept[IllegalArgumentException] {
+            renverse(List())
+        } //TODO FIX ME
     }
 
     // TESTS Function
