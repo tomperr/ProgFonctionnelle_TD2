@@ -138,7 +138,44 @@ object listsFun {
      * @param   listB une liste de nombres
      * @return  funsion des 2 listes
      */
-    def fusion(listA: List[Long], listB: List[Long]): List[Long] = ???
+    /*
+    def fusion(listA: List[Long], listB: List[Long]): List[Long] = {
+      def contains(needle: Long, myList: List[Long]): Boolean = {
+        (needle, myList) match {
+          case (needle, Nil) => false
+          case (needle, elem::reste) if elem == needle => true
+          case (needle, elem::reste) if elem != needle => contains(needle, reste)
+        }
+      }
+      (listA, listB) match {
+        case (Nil, Nil) => Nil
+        case (Nil,_) => listB
+        case (_, Nil) => listA
+        case (elemA::resteA, _) if !contains(elemA, listB) => elemA::fusion(resteA, listB)
+        case (elemA::resteA, _) if contains(elemA, listB) => fusion(resteA, listB)
+      }
+    }
+    */
+    
+    def fusion(listA: List[Long], listB: List[Long]): List[Long] = {
+      def count(needle: Long, myList: List[Long]): Long = {
+        (needle, myList) match {
+          case (needle, Nil) => 0
+          case (needle, elem::reste) if elem == needle => 1 + count(needle, reste)
+          case (needle, elem::reste) if elem != needle => count(needle, reste)
+        }
+      }
+      def removeDup(myList: List[Long]) : List[Long] = {
+        myList match {
+          case Nil => Nil
+          case elem::Nil if count(elem, myList) > 1 => Nil
+          case elem::Nil if count(elem, myList) == 1 => elem::Nil
+          case elem::reste if count(elem, myList) > 1 => removeDup(reste)
+          case elem::reste if count(elem, myList) == 1 => elem::removeDup(reste)
+        }
+      }
+      removeDup(listA:::listB)
+    }
 
     /**
      * Ecrire une methode qui aplatit une liste. List(1, List(2, 3), 4) donnera List(1, 2, 3, 4 )
@@ -147,7 +184,13 @@ object listsFun {
      * @param   list une liste de liste
      * @return  la liste aplatit
      */
-    def flatten(list: List[Any]): List[Any] = ???
+    def flatten(list: List[Any]): List[Any] = {
+      list match {
+        case (elem:List[_])::reste => flatten(elem):::flatten(reste)
+        case elem::reste => elem::flatten(reste)
+        case _ => Nil
+      }
+    }
 
     /**
      * Ecrire une methode qui renvoie l intersection de deux listes de nombres sans redondance.
@@ -158,5 +201,11 @@ object listsFun {
      * @param   listB une liste de nombres
      * @return  funsion des 2 listes
      */
-    def intersection(listA: List[Long], listB: List[Long]): List[Long] = ???
+    def intersection(listA: List[Long], listB: List[Long]): List[Long] = {
+      (listA, listB) match {
+        case (Nil, Nil) | (Nil, _) | (_, Nil) => Nil
+        case (elemA::resteA, _) if listB.contains(elemA) => elemA::intersection(resteA, listB)
+        case (elemA::resteA, _) if !listB.contains(elemA) => intersection(resteA, listB)
+      }
+    }
 }
